@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/DiogoCastroSilva/eslint-config#readme",
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
     "@typescript-eslint/parser": "^5.3.1"
