@@ -32,13 +32,13 @@ typescript eslint prettier
 **If you are using yarn:**
 
 ```shell
-yarn add -D eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
+yarn add -D @DiogoCastroSilva/eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
 ```
 
 **If you are using npm:**
 
 ```shell
-npm install --save-dev eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
+npm install --save-dev @DiogoCastroSilva/eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
 ```
 
 ### Tell ESLint to use this config
@@ -47,7 +47,7 @@ Create an `.eslintrc.js`  file in the root of your project and add the following
 
 ``` js
 module.exports = {
-  extends: ['eslint-config'],
+  extends: ['@DiogoCastroSilva/eslint-config'],
 };
 ```
 
