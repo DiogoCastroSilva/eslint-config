@@ -1,6 +1,6 @@
 {
   "name": "@diogozx-org/eslint-config",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Reusable ESLint flat configs for TypeScript and Next.js with Prettier integration",
   "type": "module",
   "exports": {
