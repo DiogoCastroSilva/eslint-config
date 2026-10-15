@@ -33,7 +33,7 @@ This enables the recommended TypeScript ESLint rules and reports Prettier format
 
 The Next.js preset composes the shared TypeScript/Prettier config with the official Next.js Core Web Vitals and TypeScript presets.
 
-Install the additional Next.js config dependency using the version compatible with your app. The preset was checked against the projects in this workspace: Next.js 16.4.0 in the Fieldnote lab and Next.js 16.2.9 in jury-management.
+Install the additional Next.js config dependency using the version compatible with your app. The projects that motivated this preset currently use Next.js 16.4.0 in the Fieldnote lab and Next.js 16.2.9 in jury-management; the peer range supports both.
 
 ```sh
 npm install --save-dev @diogozx-org/eslint-config eslint-config-next eslint prettier typescript
