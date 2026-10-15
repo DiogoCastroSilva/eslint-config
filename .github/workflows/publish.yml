@@ -43,4 +43,16 @@ jobs:
             exit 0
           fi
 
-          npm publish --access public
+          # The version can be published by a manual command while this job is
+          # running. If npm rejects the publish, recheck before failing so that
+          # this race does not leave the workflow red after a successful publish.
+          if npm publish --access public; then
+            exit 0
+          fi
+
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+            echo "${PACKAGE_NAME}@${PACKAGE_VERSION} is now available on npm; treating publish as successful."
+            exit 0
+          fi
+
+          exit 1
