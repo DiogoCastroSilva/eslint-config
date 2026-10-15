@@ -1,58 +1,56 @@
-<h1 align="center">
-  eslint-config
-</h1>
+# @diogocastrosilva/eslint-config
 
-<h3 align="center">
-  An ESLint config standard for my projects
-</h3>
+A shareable ESLint **flat config** for TypeScript projects, with Prettier formatting checks.
 
-<p align="center">
-This is a ESLint config that you can use in your projects.
-</p>
+## Requirements
 
-<p align="center">
-  <a href="https://github.com/DiogoCastroSilva/eslint-config/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="eslint-config is released under the MIT license." />
-  </a>
-  <a href="https://www.npmjs.com/package/@DiogoCastroSilva/eslint-config">
-    <img src="https://img.shields.io/npm/v/@DiogoCastroSilva/eslint-config.svg" alt="Current npm package version." />
-  </a>
-</p>
+- Node.js 20.19+, 22.13+, or 24+
+- ESLint 9 or 10
+- TypeScript 5.3+
+- Prettier 3
 
-## 🚀 Get Up and Running
+## Install
 
-You can install this package using your favorite package manager. This configuration assumes that you have **ESLint**, **Typescript** and **Prettier** already installed; if not, install the following additional dependencies.
+Install the config and its peer requirements in your project:
 
-```text
-typescript eslint prettier
+```sh
+npm install --save-dev @diogocastrosilva/eslint-config eslint prettier typescript
 ```
 
-### Add the new dependencies
+The config package supplies the TypeScript ESLint integration and Prettier ESLint integration. You do not need to install those plugins separately.
 
-**If you are using yarn:**
+## Configure
 
-```shell
-yarn add -D @DiogoCastroSilva/eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
+Create `eslint.config.js` in your project root:
+
+```js
+import config from "@diogocastrosilva/eslint-config";
+
+export default config;
 ```
 
-**If you are using npm:**
+This package uses ESLint's native flat-config format. It is intended for ESLint 9 and 10; it does not provide a legacy `.eslintrc` configuration.
 
-```shell
-npm install --save-dev @DiogoCastroSilva/eslint-config @typescript-eslint/eslint-plugin eslint-plugin-prettier
+## What it enables
+
+- The recommended TypeScript ESLint rules
+- Prettier formatting violations reported as ESLint errors
+- No requirement for explicit function return types
+- No requirement for explicit member accessibility modifiers
+
+Run ESLint as usual:
+
+```sh
+npx eslint .
 ```
 
-### Tell ESLint to use this config
+## Development
 
-Create an `.eslintrc.js`  file in the root of your project and add the following code:
-
-``` js
-module.exports = {
-  extends: ['@DiogoCastroSilva/eslint-config'],
-};
+```sh
+npm install --package-lock=false
+npm test
 ```
 
-At this point you should be good to go 👍
+## License
 
-## :memo: License
-
-Licensed under the [MIT License](./LICENSE).
+MIT
