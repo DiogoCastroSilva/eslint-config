@@ -1,5 +1,7 @@
 # @diogocastrosilva/eslint-config
 
+[![npm version](https://img.shields.io/npm/v/%40diogocastrosilva%2Feslint-config)](https://www.npmjs.com/package/@diogocastrosilva/eslint-config)
+
 A shareable ESLint **flat config** for TypeScript projects, with Prettier formatting checks.
 
 ## Requirements
