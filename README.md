@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Feslint-config)](https://www.npmjs.com/package/@diogozx-org/eslint-config)
 
-A shareable ESLint **flat config** for TypeScript projects, with Prettier formatting checks.
+Reusable ESLint **flat configs** for TypeScript projects and Next.js, with Prettier formatting checks.
 
 ## Requirements
 
@@ -11,17 +11,13 @@ A shareable ESLint **flat config** for TypeScript projects, with Prettier format
 - TypeScript 5.3+
 - Prettier 3
 
-## Install
+## TypeScript config
 
-Install the config and its peer requirements in your project:
+Install the config and its peer requirements:
 
 ```sh
 npm install --save-dev @diogozx-org/eslint-config eslint prettier typescript
 ```
-
-The config package supplies the TypeScript ESLint integration and Prettier ESLint integration. You do not need to install those plugins separately.
-
-## Configure
 
 Create `eslint.config.js` in your project root:
 
@@ -31,16 +27,36 @@ import config from "@diogozx-org/eslint-config";
 export default config;
 ```
 
-This package uses ESLint's native flat-config format. It is intended for ESLint 9 and 10; it does not provide a legacy `.eslintrc` configuration.
+This enables the recommended TypeScript ESLint rules and reports Prettier formatting violations as ESLint errors. The config package supplies the TypeScript ESLint and Prettier ESLint integrations, so you do not need to install those plugins separately.
 
-## What it enables
+## Next.js config
 
-- The recommended TypeScript ESLint rules
+The Next.js preset composes the shared TypeScript/Prettier config with the official Next.js Core Web Vitals and TypeScript presets.
+
+Install the additional Next.js config dependency using the version compatible with your app. The preset was checked against the projects in this workspace: Next.js 16.4.0 in the Fieldnote lab and Next.js 16.2.9 in jury-management.
+
+```sh
+npm install --save-dev @diogozx-org/eslint-config eslint-config-next eslint prettier typescript
+```
+
+Then use the dedicated export in your app's `eslint.config.mjs`:
+
+```js
+import nextConfig from "@diogozx-org/eslint-config/next";
+
+export default nextConfig;
+```
+
+The preset includes these global ignores: `.next/**`, `out/**`, `build/**`, and `next-env.d.ts`. It expects to be used as the app's ESLint config, with `eslint-config-next` installed in that app. It does not pin Next.js itself or install a Next.js version for you.
+
+## What the configs enable
+
+- Recommended TypeScript ESLint rules
 - Prettier formatting violations reported as ESLint errors
-- No requirement for explicit function return types
-- No requirement for explicit member accessibility modifiers
+- No requirement for explicit function return types or member accessibility modifiers
+- For Next.js projects: the official Next.js Core Web Vitals and TypeScript rules
 
-Run ESLint as usual:
+## Run ESLint
 
 ```sh
 npx eslint .
