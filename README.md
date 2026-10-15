@@ -1,6 +1,6 @@
-# @diogocastrosilva/eslint-config
+# @diogozx-org/eslint-config
 
-[![npm version](https://img.shields.io/npm/v/%40diogocastrosilva%2Feslint-config)](https://www.npmjs.com/package/@diogocastrosilva/eslint-config)
+[![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Feslint-config)](https://www.npmjs.com/package/@diogozx-org/eslint-config)
 
 A shareable ESLint **flat config** for TypeScript projects, with Prettier formatting checks.
 
@@ -16,7 +16,7 @@ A shareable ESLint **flat config** for TypeScript projects, with Prettier format
 Install the config and its peer requirements in your project:
 
 ```sh
-npm install --save-dev @diogocastrosilva/eslint-config eslint prettier typescript
+npm install --save-dev @diogozx-org/eslint-config eslint prettier typescript
 ```
 
 The config package supplies the TypeScript ESLint integration and Prettier ESLint integration. You do not need to install those plugins separately.
@@ -26,7 +26,7 @@ The config package supplies the TypeScript ESLint integration and Prettier ESLin
 Create `eslint.config.js` in your project root:
 
 ```js
-import config from "@diogocastrosilva/eslint-config";
+import config from "@diogozx-org/eslint-config";
 
 export default config;
 ```
