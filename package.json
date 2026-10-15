@@ -1,14 +1,16 @@
 {
   "name": "@diogozx-org/eslint-config",
   "version": "2.0.0",
-  "description": "A reusable ESLint flat configuration for TypeScript with Prettier integration",
+  "description": "Reusable ESLint flat configs for TypeScript and Next.js with Prettier integration",
   "type": "module",
   "exports": {
     ".": "./index.js",
+    "./next": "./next.js",
     "./package.json": "./package.json"
   },
   "files": [
     "index.js",
+    "next.js",
     "README.md",
     "LICENSE"
   ],
@@ -46,6 +48,12 @@
   "peerDependencies": {
     "eslint": "^9.0.0 || ^10.0.0",
     "prettier": "^3.0.0",
-    "typescript": ">=5.3.0"
+    "typescript": ">=5.3.0",
+    "eslint-config-next": "^16.2.9"
+  },
+  "peerDependenciesMeta": {
+    "eslint-config-next": {
+      "optional": true
+    }
   }
 }
