@@ -1,0 +1,39 @@
+{
+  "name": "@diogozx-org/tsconfig",
+  "version": "1.0.0",
+  "description": "Reusable strict TypeScript compiler presets for Next.js, React, Vite, and Node.js",
+  "type": "module",
+  "files": [
+    "*.json",
+    "README.md"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./strictest.json": "./strictest.json",
+    "./nextjs.json": "./nextjs.json",
+    "./react-library.json": "./react-library.json",
+    "./vite.json": "./vite.json",
+    "./node.json": "./node.json"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiogoCastroSilva/eslint-config.git",
+    "directory": "packages/tsconfig"
+  },
+  "keywords": [
+    "typescript",
+    "tsconfig",
+    "nextjs",
+    "react",
+    "vite",
+    "node"
+  ],
+  "author": "Diogo Silva",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
