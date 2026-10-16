@@ -49,6 +49,23 @@ export default nextConfig;
 
 The preset includes these global ignores: `.next/**`, `out/**`, `build/**`, and `next-env.d.ts`. It expects to be used as the app's ESLint config, with `eslint-config-next` installed in that app. It does not pin Next.js itself or install a Next.js version for you.
 
+
+## React preset
+
+Use this for React packages that are not already using the Next.js preset:
+
+```sh
+npm install --save-dev @diogozx-org/eslint-config eslint prettier typescript
+```
+
+```js
+import reactConfig from "@diogozx-org/eslint-config/react";
+
+export default reactConfig;
+```
+
+The preset includes the official React Hooks recommended rules and JSX accessibility recommended rules. The package supplies the React Hooks and JSX accessibility plugins. Keep framework-specific configuration, project aliases, and generated-file ignores local to the consuming project.
+
 ## Storybook preset
 
 Install `eslint-plugin-storybook` alongside the shared config:
