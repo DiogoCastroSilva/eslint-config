@@ -173,6 +173,11 @@ jobs:
         with:
           name: lighthouse-reports
           path: .lighthouseci
+          # .lighthouseci is a dot-directory (hidden). upload-artifact@v4
+          # excludes hidden files by default, so without this flag the glob
+          # matches nothing and the artifact is silently empty.
+          include-hidden-files: true
+          if-no-files-found: warn
           retention-days: 30
 
       - name: Print audit summary
