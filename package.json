@@ -1,16 +1,18 @@
 {
   "name": "@diogozx-org/eslint-config",
-  "version": "2.1.0",
-  "description": "Reusable ESLint flat configs for TypeScript and Next.js with Prettier integration",
+  "version": "2.2.0",
+  "description": "Reusable ESLint flat configs for TypeScript, Next.js, React, and Storybook with Prettier integration",
   "type": "module",
   "exports": {
     ".": "./index.js",
     "./next": "./next.js",
+    "./storybook": "./storybook.js",
     "./package.json": "./package.json"
   },
   "files": [
     "index.js",
     "next.js",
+    "storybook.js",
     "README.md",
     "LICENSE"
   ],
@@ -29,6 +31,8 @@
     "eslint-config",
     "flat-config",
     "typescript",
+    "nextjs",
+    "storybook",
     "prettier"
   ],
   "author": "Diogo Silva",
@@ -49,11 +53,22 @@
     "eslint": "^9.0.0 || ^10.0.0",
     "prettier": "^3.0.0",
     "typescript": ">=5.3.0",
-    "eslint-config-next": "^16.2.9"
+    "eslint-config-next": "^16.2.9",
+    "eslint-plugin-storybook": "^10.0.0"
   },
   "peerDependenciesMeta": {
     "eslint-config-next": {
       "optional": true
+    },
+    "eslint-plugin-storybook": {
+      "optional": true
     }
+  },
+  "devDependencies": {
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.0",
+    "eslint-plugin-storybook": "^10.6.2",
+    "prettier": "^3.9.10",
+    "typescript": "^5.0.0"
   }
 }
