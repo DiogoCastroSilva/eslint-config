@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Feslint-config)](https://www.npmjs.com/package/@diogozx-org/eslint-config)
 
-Reusable ESLint **flat configs** for TypeScript projects and Next.js, with Prettier formatting checks.
+Reusable ESLint **flat configs** for TypeScript projects, Next.js, and Storybook, with Prettier formatting checks.
 
 ## Requirements
 
@@ -11,7 +11,7 @@ Reusable ESLint **flat configs** for TypeScript projects and Next.js, with Prett
 - TypeScript 5.3+
 - Prettier 3
 
-## TypeScript config
+## Base TypeScript config
 
 Install the config and its peer requirements:
 
@@ -19,7 +19,7 @@ Install the config and its peer requirements:
 npm install --save-dev @diogozx-org/eslint-config eslint prettier typescript
 ```
 
-Create `eslint.config.js` in your project root:
+Create `eslint.config.mjs` in your project root:
 
 ```js
 import config from "@diogozx-org/eslint-config";
@@ -27,13 +27,13 @@ import config from "@diogozx-org/eslint-config";
 export default config;
 ```
 
-This enables the recommended TypeScript ESLint rules and reports Prettier formatting violations as ESLint errors. The config package supplies the TypeScript ESLint and Prettier ESLint integrations, so you do not need to install those plugins separately.
+This enables recommended TypeScript ESLint rules and reports Prettier formatting violations as ESLint errors. The config package supplies the TypeScript ESLint and Prettier integrations, so you do not need to install those plugins separately.
 
-## Next.js config
+## Next.js preset
 
 The Next.js preset composes the shared TypeScript/Prettier config with the official Next.js Core Web Vitals and TypeScript presets.
 
-Install the additional Next.js config dependency using the version compatible with your app. The projects that motivated this preset currently use Next.js 16.4.0 in the Fieldnote lab and Next.js 16.2.9 in jury-management; the peer range supports both.
+Install the additional Next.js config dependency using a version compatible with your app:
 
 ```sh
 npm install --save-dev @diogozx-org/eslint-config eslint-config-next eslint prettier typescript
@@ -49,12 +49,33 @@ export default nextConfig;
 
 The preset includes these global ignores: `.next/**`, `out/**`, `build/**`, and `next-env.d.ts`. It expects to be used as the app's ESLint config, with `eslint-config-next` installed in that app. It does not pin Next.js itself or install a Next.js version for you.
 
+## Storybook preset
+
+Install `eslint-plugin-storybook` alongside the shared config:
+
+```sh
+npm install --save-dev @diogozx-org/eslint-config eslint-plugin-storybook eslint prettier typescript
+```
+
+Use the preset in a Storybook app or in the package containing your stories:
+
+```js
+import storybookConfig from "@diogozx-org/eslint-config/storybook";
+
+export default storybookConfig;
+```
+
+The preset combines Storybook's flat recommended rules with the shared TypeScript and Prettier rules. The plugin is an optional peer dependency, so consumers that do not use Storybook do not need to install it.
+
+When composing this preset with local configuration, retain any project-specific rules and generated-file ignores. Prefer narrow file patterns and central ignores for generated output over broad source exclusions.
+
 ## What the configs enable
 
 - Recommended TypeScript ESLint rules
 - Prettier formatting violations reported as ESLint errors
 - No requirement for explicit function return types or member accessibility modifiers
-- For Next.js projects: the official Next.js Core Web Vitals and TypeScript rules
+- For Next.js projects: official Next.js Core Web Vitals and TypeScript rules
+- For Storybook projects: official Storybook recommended rules
 
 ## Run ESLint
 
