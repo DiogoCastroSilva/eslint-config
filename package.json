@@ -20,7 +20,7 @@
     "react.js"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test test.js"
   },
   "engines": {
     "node": "^20.19.0 || ^22.13.0 || >=24"
