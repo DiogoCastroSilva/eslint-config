@@ -1,0 +1,35 @@
+{
+  "name": "@diogozx-org/prettier-config",
+  "version": "1.0.0",
+  "description": "Shared Prettier formatting conventions for TypeScript and frontend projects",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "peerDependencies": {
+    "prettier": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiogoCastroSilva/eslint-config.git",
+    "directory": "packages/prettier-config"
+  },
+  "keywords": [
+    "prettier",
+    "prettier-config",
+    "formatting"
+  ],
+  "author": "Diogo Silva",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}
