@@ -1,116 +1,73 @@
 # Frontend Tooling
 
-Reusable configuration packages for consistent frontend and TypeScript engineering across projects.
+[![CI](https://github.com/DiogoCastroSilva/frontend-tooling/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DiogoCastroSilva/frontend-tooling/actions/workflows/ci.yml)
 
-This repository contains three independently versioned npm packages. The existing ESLint package remains at the repository root to preserve its release workflow; the other packages live under `packages/`.
+Reusable configuration packages for consistent frontend and TypeScript engineering across projects. Each npm package is independently versioned and published from its own directory under `packages/`.
 
 ## Packages
 
-| Package | Purpose | Guide |
-| --- | --- | --- |
-| [`@diogozx-org/eslint-config`](https://www.npmjs.com/package/@diogozx-org/eslint-config) | ESLint flat configs for TypeScript, React, Next.js, and Storybook, with Prettier integration | [ESLint config](#eslint-config) |
-| [`@diogozx-org/tsconfig`](https://www.npmjs.com/package/@diogozx-org/tsconfig) | TypeScript compiler presets for Next.js, React libraries, Vite, and Node.js | [TypeScript presets](packages/tsconfig/README.md) |
-| [`@diogozx-org/prettier-config`](https://www.npmjs.com/package/@diogozx-org/prettier-config) | Shared Prettier formatting defaults | [Prettier config](packages/prettier-config/README.md) |
+| Package | Version | Purpose | Documentation |
+| --- | --- | --- | --- |
+| [`@diogozx-org/eslint-config`](https://www.npmjs.com/package/@diogozx-org/eslint-config) | [![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Feslint-config)](https://www.npmjs.com/package/@diogozx-org/eslint-config) | ESLint flat configs for TypeScript, React, Next.js, and Storybook, with Prettier integration | [README](packages/eslint-config/README.md) |
+| [`@diogozx-org/tsconfig`](https://www.npmjs.com/package/@diogozx-org/tsconfig) | [![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Ftsconfig)](https://www.npmjs.com/package/@diogozx-org/tsconfig) | TypeScript compiler presets for Next.js, React libraries, Vite, and Node.js | [README](packages/tsconfig/README.md) |
+| [`@diogozx-org/prettier-config`](https://www.npmjs.com/package/@diogozx-org/prettier-config) | [![npm version](https://img.shields.io/npm/v/%40diogozx-org%2Fprettier-config)](https://www.npmjs.com/package/@diogozx-org/prettier-config) | Shared Prettier formatting defaults | [README](packages/prettier-config/README.md) |
 
-## ESLint config
+## Repository layout
 
-### Requirements
-
-- Node.js 20.19+, 22.13+, or 24+
-- ESLint 9 or 10
-- TypeScript 5.3+
-- Prettier 3
-
-Install the package and peer requirements:
-
-```sh
-npm install --save-dev @diogozx-org/eslint-config eslint prettier typescript
+```text
+frontend-tooling/
+├── .github/
+│   └── workflows/
+│       ├── ci.yml
+│       ├── publish.yml
+│       └── publish-config-packages.yml
+├── packages/
+│   ├── eslint-config/
+│   ├── prettier-config/
+│   └── tsconfig/
+├── package.json
+├── README.md
+└── LICENSE
 ```
 
-Create `eslint.config.mjs`:
-
-```js
-import config from "@diogozx-org/eslint-config";
-
-export default config;
-```
-
-The base preset enables recommended TypeScript ESLint rules and reports Prettier formatting violations as ESLint errors. The package supplies the TypeScript ESLint and Prettier integrations.
-
-### Next.js
-
-Install `eslint-config-next` using a version compatible with your app:
-
-```sh
-npm install --save-dev @diogozx-org/eslint-config eslint-config-next eslint prettier typescript
-```
-
-```js
-import nextConfig from "@diogozx-org/eslint-config/next";
-
-export default nextConfig;
-```
-
-This preset includes ignores for `.next/**`, `out/**`, `build/**`, and `next-env.d.ts`. It expects `eslint-config-next` to be installed by the consuming app.
-
-### React
-
-Use this for React packages that are not already using the Next.js preset:
-
-```js
-import reactConfig from "@diogozx-org/eslint-config/react";
-
-export default reactConfig;
-```
-
-This includes the recommended React Hooks and JSX accessibility rules. Keep framework-specific configuration, aliases, and generated-file ignores local to the consuming project.
-
-### Storybook
-
-Install `eslint-plugin-storybook` alongside the shared config:
-
-```sh
-npm install --save-dev @diogozx-org/eslint-config eslint-plugin-storybook eslint prettier typescript
-```
-
-```js
-import storybookConfig from "@diogozx-org/eslint-config/storybook";
-
-export default storybookConfig;
-```
-
-The Storybook plugin is an optional peer dependency.
+The root `package.json` defines the npm workspace and scripts for testing every package. Each directory under `packages/` contains its own publishable package manifest, implementation, tests, and package README.
 
 ## Development
 
-Run tests for the root ESLint package:
+Requirements: Node.js 20.19+, 22.13+, or 24+.
+
+Install dependencies from the repository root:
 
 ```sh
 npm install --package-lock=false
+```
+
+Run all package tests:
+
+```sh
 npm test
 ```
 
-Run the other package tests:
+Run an individual package's tests:
 
 ```sh
-npm --prefix packages/tsconfig test
-npm --prefix packages/prettier-config test
+npm run test:eslint
+npm run test:tsconfig
+npm run test:prettier
 ```
+
+CI runs all three package test suites on Node.js 20, 22, and 24.
 
 ## Publishing
 
-GitHub Actions publishes the root ESLint package when its `package.json` or publishing workflow changes on `main`. A separate workflow publishes the TypeScript and Prettier packages when their files or shared-package workflow changes.
+Packages are released independently; a change to one package does not require publishing the others.
 
-Publishing uses npm Trusted Publishing (OIDC). Configure a Trusted Publisher separately for each npm package:
+- **ESLint:** changes under `packages/eslint-config/` trigger [`publish.yml`](.github/workflows/publish.yml).
+- **TypeScript and Prettier:** changes under their respective directories trigger [`publish-config-packages.yml`](.github/workflows/publish-config-packages.yml).
 
-- GitHub owner: `DiogoCastroSilva`
-- Repository: `frontend-tooling`
-- Workflow file: `publish.yml` for the root ESLint package; `publish-config-packages.yml` for the packages under `packages/`
-- Environment: leave blank unless the workflow is changed to use a GitHub environment
+Each workflow checks whether the current package version is already available on npm before publishing. Publishing uses npm Trusted Publishing (OIDC). Configure each package separately in npm with GitHub owner `DiogoCastroSilva`, repository `frontend-tooling`, the relevant workflow filename, and no GitHub environment. The existing ESLint package must trust `publish.yml`; the other two must trust `publish-config-packages.yml`.
 
-**After the GitHub repository rename, update the Trusted Publisher configuration for the existing ESLint package too.** Its old repository name no longer matches. Each new npm package also needs its own configuration. If npm does not accept the first publication through Trusted Publishing, publish that package once with authorized npm credentials, then configure Trusted Publishing for future releases.
-
-The shared-package workflow checks whether the exact version is already published and rechecks after a failed publish to handle concurrent releases safely.
+For first publication, if npm rejects the trusted publish, publish the package once using authorized npm credentials and then configure Trusted Publishing for subsequent releases. Do not reuse a package version that has already been published; increment that package's version for future releases.
 
 ## License
 
