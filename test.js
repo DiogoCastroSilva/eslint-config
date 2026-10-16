@@ -42,7 +42,7 @@ test("Storybook preset lints a valid CSF story", async () => {
 
   const [result] = await eslint.lintText(
     [
-      'import type { Meta, StoryObj } from "@storybook/react";',
+      'import type { Meta, StoryObj } from "@storybook/react-vite";',
       "const Example = () => null;",
       'const meta = { title: "Example/Button", component: Example } satisfies Meta;',
       "export default meta;",
