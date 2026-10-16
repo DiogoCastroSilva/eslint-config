@@ -1,23 +1,26 @@
 {
   "name": "@diogozx-org/eslint-config",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Reusable ESLint flat configs for TypeScript, Next.js, React, and Storybook with Prettier integration",
   "type": "module",
-  "exports": {
+    "exports": {
     ".": "./index.js",
+    "./base": "./base.js",
     "./next": "./next.js",
+    "./react": "./react.js",
     "./storybook": "./storybook.js",
-    "./package.json": "./package.json",
-    "./react": "./react.js"
+    "./type-checked": "./type-checked.js",
+    "./package.json": "./package.json"
   },
-  "files": [
+    "files": [
     "index.js",
-    "next.js",
-    "storybook.js",
-    "README.md",
-    "LICENSE",
     "base.js",
-    "react.js"
+    "next.js",
+    "react.js",
+    "storybook.js",
+    "type-checked.js",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "test": "node --test test.js"
