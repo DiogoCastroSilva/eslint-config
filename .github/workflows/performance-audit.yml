@@ -1,0 +1,185 @@
+name: Performance Audit
+
+# Reusable, automated Lighthouse CI performance audit. Callers provide their
+# build output (or a build command) and the routes to audit; this workflow
+# serves the static site, runs Lighthouse (3 runs per route by default),
+# asserts configurable performance budgets, and uploads the reports as an
+# artifact. Default budgets are report-only (warnings), so audits never block
+# CI until a consumer opts into stricter thresholds. See README.md.
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to use. Leave empty to read .nvmrc."
+        type: string
+        default: ""
+      output-dir:
+        description: "Directory containing the built static site (relative to repo root). Used as LHCI's staticDistDir."
+        type: string
+        default: "out"
+      urls:
+        description: "Comma-separated list of routes to audit (e.g. '/', '/about'). Resolved against the served static site."
+        type: string
+        default: "/"
+      install-command:
+        description: "Dependency install command run from the repo root (build mode only)."
+        type: string
+        default: "npm ci"
+      build-command:
+        description: "Build command run from the repo root (build mode only). Ignored when artifact-name is set."
+        type: string
+        default: "npm run build"
+      artifact-name:
+        description: "Name of a pre-built site artifact (uploaded by a prior job in the caller workflow) to audit instead of building. Skips install/build when set; avoids a duplicate production build."
+        type: string
+        default: ""
+      budget-path:
+        description: "Path (relative to repo root) to a JSON file of LHCI assertions. A pure assertions object or { routes, assertions } is accepted. Overrides the default report-only budgets."
+        type: string
+        default: ""
+      number-of-runs:
+        description: "Number of Lighthouse runs per URL (LHCI keeps the median to reduce noise)."
+        type: number
+        default: 3
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  audit:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          node-version-file: .nvmrc
+
+      # Build mode (default): install deps + build the site into `output-dir`.
+      - name: Install dependencies & build site
+        if: ${{ inputs.artifact-name == '' }}
+        run: |
+          ${{ inputs.install-command }}
+          ${{ inputs.build-command }}
+
+      # Artifact mode: audit a pre-built site produced by an earlier job in the
+      # caller workflow. This is how consumers avoid rebuilding the site.
+      - name: Download pre-built site artifact
+        if: ${{ inputs.artifact-name != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ${{ inputs.output-dir }}
+
+      # Resolve the directory that actually contains index.html. This tolerates
+      # differences between upload-artifact path layouts (v3 vs v4) and build
+      # outputs that land in subdirectories.
+      - name: Locate built site root
+        id: site
+        shell: bash
+        run: |
+          SITE_DIR=""
+          if [ -f "${{ inputs.output-dir }}/index.html" ]; then
+            SITE_DIR="${{ inputs.output-dir }}"
+          else
+            SITE_DIR=$(find . \( -path ./.git -o -path ./node_modules -o -path ./.github \) -prune -o -name index.html -print 2>/dev/null | head -1 | xargs dirname)
+          fi
+          if [ -z "$SITE_DIR" ] || [ ! -f "$SITE_DIR/index.html" ]; then
+            echo "::error::No index.html found under ${{ inputs.output-dir }}. Verify build-command / artifact-name and output-dir."
+            exit 1
+          fi
+          echo "site_dir=$SITE_DIR" >> "$GITHUB_OUTPUT"
+          echo "Static site located at: $SITE_DIR"
+          ls -1 "$SITE_DIR" | head -20
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.15.1
+
+      # Generate the LHCI config from inputs. Default budgets are report-only
+      # (warnings) and are tuned to the reference site's measured medians
+      # (see /perf-budgets.json). A caller may override them with budget-path.
+      - name: Generate LHCI configuration
+        shell: bash
+        env:
+          STATIC_DIST_DIR: ${{ steps.site.outputs.site_dir }}
+          ROUTES: ${{ inputs.urls }}
+          NUM_RUNS: ${{ inputs.number-of-runs }}
+          BUDGET_PATH: ${{ inputs.budget-path }}
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from "node:fs";
+          const staticDistDir = process.env.STATIC_DIST_DIR;
+          const routes = process.env.ROUTES
+            .split(",").map(s => s.trim()).filter(Boolean);
+          const numRuns = Number(process.env.NUM_RUNS) || 3;
+          const budgetPath = process.env.BUDGET_PATH || "";
+          const defaultAssertions = {
+            "categories:performance": ["warn", { minScore: 0.90 }],
+            "categories:accessibility": ["warn", { minScore: 0.90 }],
+            "categories:seo": ["warn", { minScore: 0.90 }],
+            "categories:best-practices": ["warn", { minScore: 0.90 }],
+                        "largest-contentful-paint": ["warn", { maxNumericValue: 2500 }],
+            "total-blocking-time": ["warn", { maxNumericValue: 600 }],
+            "cumulative-layout-shift": ["warn", { maxNumericValue: 0.25 }],
+            "first-contentful-paint": ["warn", { maxNumericValue: 2000 }],
+            "speed-index": ["warn", { maxNumericValue: 2000 }],
+                        "modern-image-formats": ["warn", { minScore: 0.4 }]
+          };
+          let assertions = defaultAssertions;
+          if (budgetPath) {
+            const raw = JSON.parse(fs.readFileSync(budgetPath, "utf8"));
+            assertions = raw.assertions || raw;
+            console.log("Loaded budgets from " + budgetPath);
+          }
+          const config = {
+            ci: {
+              collect: {
+                staticDistDir,
+                url: routes,
+                numberOfRuns: numRuns,
+                settings: {
+                  chromeFlags: "--no-sandbox --headless",
+                  onlyCategories: ["performance", "accessibility", "seo", "best-practices"]
+                }
+              },
+              assert: { assertions }
+            }
+          };
+          fs.writeFileSync(".lighthouserc.json", JSON.stringify(config, null, 2));
+          console.log("staticDistDir:", staticDistDir);
+          console.log("routes:", JSON.stringify(routes));
+          console.log("numberOfRuns:", numRuns);
+          JS
+
+      - name: Run Lighthouse audits (LHCI collect)
+        run: lhci collect --config=.lighthouserc.json
+
+      # `lhci assert` exits non-zero only when an `error`-level assertion fails.
+      # The default budgets are `warn` (report-only), so this stays green until a
+      # consumer raises thresholds to `error`.
+      - name: Assert performance budgets
+        run: lhci assert --config=.lighthouserc.json
+
+      - name: Publish LHCI reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci
+          retention-days: 30
+
+      - name: Print audit summary
+        if: always()
+        run: |
+          echo "LHCI collect complete. Reports: .lighthouseci/"
+          ls -1 .lighthouseci/*.html 2>/dev/null | head
+          echo "---"
+          echo "Budgets are report-only (warn) by default."
+          echo "To enforce, edit thresholds and set the assertion level to 'error'."
