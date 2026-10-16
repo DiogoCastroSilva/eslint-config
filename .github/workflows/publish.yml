@@ -1,10 +1,10 @@
-name: Publish to npm
+name: Publish ESLint config to npm
 
 on:
   push:
     branches: [main]
     paths:
-      - "package.json"
+      - "packages/eslint-config/**"
       - ".github/workflows/publish.yml"
 
 permissions:
@@ -27,13 +27,14 @@ jobs:
       - name: Install a Trusted Publishing-compatible npm version
         run: npm install --global npm@^11.5.1
 
-      - name: Install dependencies
+      - name: Install workspace dependencies
         run: npm install --package-lock=false
 
-      - name: Run tests
-        run: npm test
+      - name: Run package tests
+        run: npm run test:eslint
 
       - name: Publish package if this version is not already on npm
+        working-directory: packages/eslint-config
         run: |
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
@@ -43,9 +44,6 @@ jobs:
             exit 0
           fi
 
-          # The version can be published by a manual command while this job is
-          # running. If npm rejects the publish, recheck before failing so that
-          # this race does not leave the workflow red after a successful publish.
           if npm publish --access public; then
             exit 0
           fi
