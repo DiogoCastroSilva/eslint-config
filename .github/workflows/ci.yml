@@ -23,12 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
+      - name: Install workspace dependencies
         run: npm install --package-lock=false
 
-      - name: Run tests
+      - name: Run all package tests
         run: npm test
-      - name: Test TypeScript config package
-        run: npm --prefix packages/tsconfig test
-      - name: Test Prettier config package
-        run: npm --prefix packages/prettier-config test
