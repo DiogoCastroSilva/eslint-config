@@ -5,6 +5,7 @@ import { ESLint } from "eslint";
 import config from "./index.js";
 import nextConfig from "./next.js";
 import storybookConfig from "./storybook.js";
+import reactConfig from "./react.js";
 
 test("exports an ESLint flat config array", () => {
   assert.ok(Array.isArray(config));
@@ -50,6 +51,21 @@ test("Storybook preset lints a valid CSF story", async () => {
       "",
     ].join("\n"),
     { filePath: "button.stories.tsx" },
+  );
+
+  assert.equal(result.fatalErrorCount, 0, JSON.stringify(result.messages));
+  assert.equal(result.errorCount, 0, JSON.stringify(result.messages));
+});
+
+test("React preset accepts a simple accessible component", async () => {
+  const eslint = new ESLint({
+    overrideConfig: reactConfig,
+    overrideConfigFile: true,
+  });
+
+  const [result] = await eslint.lintText(
+    'export const Button = () => <button type="button">Save</button>;\\n',
+    { filePath: "Button.tsx" },
   );
 
   assert.equal(result.fatalErrorCount, 0, JSON.stringify(result.messages));
