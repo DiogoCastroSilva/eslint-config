@@ -64,7 +64,7 @@ test("React preset accepts a simple accessible component", async () => {
   });
 
   const [result] = await eslint.lintText(
-    'export const Button = () => <button type="button">Save</button>;\\n',
+    'export const Button = () => <button type="button">Save</button>;\n',
     { filePath: "Button.tsx" },
   );
 
