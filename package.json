@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DiogoCastroSilva/eslint-config.git"
+    "url": "git+https://github.com/DiogoCastroSilva/frontend-tooling.git"
   },
   "keywords": [
     "eslint",
@@ -41,9 +41,9 @@
   "author": "Diogo Silva",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DiogoCastroSilva/eslint-config/issues"
+    "url": "https://github.com/DiogoCastroSilva/frontend-tooling/issues"
   },
-  "homepage": "https://github.com/DiogoCastroSilva/eslint-config#readme",
+  "homepage": "https://github.com/DiogoCastroSilva/frontend-tooling#readme",
   "publishConfig": {
     "access": "public"
   },
