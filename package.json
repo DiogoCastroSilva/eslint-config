@@ -1,80 +1,21 @@
 {
-  "name": "@diogozx-org/eslint-config",
-  "version": "2.2.0",
-  "description": "Reusable ESLint flat configs for TypeScript, Next.js, React, and Storybook with Prettier integration",
+  "name": "frontend-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for reusable frontend engineering configuration packages",
   "type": "module",
-  "exports": {
-    ".": "./index.js",
-    "./next": "./next.js",
-    "./storybook": "./storybook.js",
-    "./package.json": "./package.json",
-    "./react": "./react.js"
-  },
-  "files": [
-    "index.js",
-    "next.js",
-    "storybook.js",
-    "README.md",
-    "LICENSE",
-    "base.js",
-    "react.js"
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
-    "test": "node --test test.js"
-  },
-  "engines": {
-    "node": "^20.19.0 || ^22.13.0 || >=24"
+    "test": "npm run test:eslint && npm run test:tsconfig && npm run test:prettier",
+    "test:eslint": "npm run test --workspace=@diogozx-org/eslint-config",
+    "test:tsconfig": "npm run test --workspace=@diogozx-org/tsconfig",
+    "test:prettier": "npm run test --workspace=@diogozx-org/prettier-config"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DiogoCastroSilva/frontend-tooling.git"
   },
-  "keywords": [
-    "eslint",
-    "eslint-config",
-    "flat-config",
-    "typescript",
-    "nextjs",
-    "storybook",
-    "prettier"
-  ],
-  "author": "Diogo Silva",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/DiogoCastroSilva/frontend-tooling/issues"
-  },
-  "homepage": "https://github.com/DiogoCastroSilva/frontend-tooling#readme",
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "typescript-eslint": "^8.58.2",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "^7.1.1"
-  },
-  "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0",
-    "prettier": "^3.0.0",
-    "typescript": ">=5.3.0",
-    "eslint-config-next": "^16.2.9",
-    "eslint-plugin-storybook": "^10.0.0"
-  },
-  "peerDependenciesMeta": {
-    "eslint-config-next": {
-      "optional": true
-    },
-    "eslint-plugin-storybook": {
-      "optional": true
-    }
-  },
-  "devDependencies": {
-    "eslint": "^9.39.5",
-    "eslint-config-next": "16.4.0",
-    "eslint-plugin-storybook": "^10.6.2",
-    "prettier": "^3.9.10",
-    "typescript": "^5.0.0",
-    "next": "16.4.0"
-  }
+  "license": "MIT"
 }
