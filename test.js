@@ -3,6 +3,8 @@ import test from "node:test";
 import { ESLint } from "eslint";
 
 import config from "./index.js";
+import nextConfig from "./next.js";
+import storybookConfig from "./storybook.js";
 
 test("exports an ESLint flat config array", () => {
   assert.ok(Array.isArray(config));
@@ -15,10 +17,41 @@ test("lints TypeScript with the shared config", async () => {
     overrideConfigFile: true,
   });
 
-  const [result] = await eslint.lintText('export const answer: number = 42;\n', {
+  const [result] = await eslint.lintText("export const answer: number = 42;\n", {
     filePath: "sample.ts",
   });
 
   assert.equal(result.fatalErrorCount, 0);
+  assert.equal(result.errorCount, 0, JSON.stringify(result.messages));
+});
+
+test("Next.js preset exports the official config and generated-file ignores", () => {
+  assert.ok(Array.isArray(nextConfig));
+  assert.ok(
+    nextConfig.some((item) => item.ignores?.includes(".next/**")),
+    "Expected the Next.js preset to ignore generated .next output",
+  );
+});
+
+test("Storybook preset lints a valid CSF story", async () => {
+  const eslint = new ESLint({
+    overrideConfig: storybookConfig,
+    overrideConfigFile: true,
+  });
+
+  const [result] = await eslint.lintText(
+    [
+      'import type { Meta, StoryObj } from "@storybook/react";',
+      "const Example = () => null;",
+      'const meta = { title: "Example/Button", component: Example } satisfies Meta;',
+      "export default meta;",
+      "type Story = StoryObj<typeof meta>;",
+      "export const Default: Story = {};",
+      "",
+    ].join("\n"),
+    { filePath: "button.stories.tsx" },
+  );
+
+  assert.equal(result.fatalErrorCount, 0, JSON.stringify(result.messages));
   assert.equal(result.errorCount, 0, JSON.stringify(result.messages));
 });
