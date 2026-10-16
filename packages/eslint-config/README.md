@@ -97,7 +97,7 @@ npm run test:eslint
 
 ## Versioning and publishing
 
-This package is versioned and published independently from the other workspaces. Update this package's `version` in `package.json) for a release. Merging changes under `packages/eslint-config/` to `main` triggers the ESLint package publishing workflow. The workflow uses npm Trusted Publishing (OIDC); the npm package must trust GitHub owner `DiogoCastroSilva`, repository `frontend-tooling`, and workflow `publish.yml`, with no GitHub environment configured.
+This package is versioned and published independently from the other workspaces. Update this package's `version` in `packages/eslint-config/package.json` for a release. Merging changes under `packages/eslint-config/` to `main` triggers the ESLint package publishing workflow. The workflow uses npm Trusted Publishing (OIDC); the npm package must trust GitHub owner `DiogoCastroSilva`, repository `frontend-tooling`, and workflow `publish.yml`, with no GitHub environment configured.
 
 ## License
 
