@@ -28,3 +28,7 @@ jobs:
 
       - name: Run tests
         run: npm test
+      - name: Test TypeScript config package
+        run: npm --prefix packages/tsconfig test
+      - name: Test Prettier config package
+        run: npm --prefix packages/prettier-config test
