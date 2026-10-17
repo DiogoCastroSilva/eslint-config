@@ -1,4 +1,5 @@
 name: Publish ESLint config to npm
+# Trusted Publishing (OIDC) requires npm package trust for workflow "publish.yml".
 
 on:
   push:
