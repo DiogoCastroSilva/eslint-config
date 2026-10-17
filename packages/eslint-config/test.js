@@ -1,3 +1,4 @@
+// Test suite for @diogozx-org/eslint-config — publishes to npm via OIDC from repo frontend-tooling
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
